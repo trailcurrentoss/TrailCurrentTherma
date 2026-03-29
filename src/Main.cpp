@@ -139,7 +139,7 @@ void setup() {
   statusLed.setBrightnessPercent(1);
   TwaiTaskBased::onReceive(onCanRx);
   TwaiTaskBased::onTransmit(onCanTx);
-  TwaiTaskBased::begin(GPIO_NUM_15, GPIO_NUM_14, 500000);
+  TwaiTaskBased::begin(GPIO_NUM_15, GPIO_NUM_14, 500000, TWAI_MODE_NO_ACK);
   statusLed.green();
   debugln("Setup done");
 }

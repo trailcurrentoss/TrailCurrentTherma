@@ -1,3 +1,3 @@
 # rename_firmware.py
 Import("env")
-env.Replace(PROGNAME="tctherma")
+env.Replace(PROGNAME="therma")

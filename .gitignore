@@ -14,6 +14,18 @@ fp-info-cache
 .pio/
 .platformio/
 
+# ESP-IDF build outputs and tooling artifacts
+build/
+build_*/
+managed_components/
+dependencies.lock
+sdkconfig.old
+sdkconfig.ci*
+*.elf
+*.map
+*.bin
+
+
 # IDEs
 .vscode/
 .idea/

@@ -20,7 +20,32 @@ CHIP="esp32s3"
 FLASH_MODE="dio"
 FLASH_SIZE="4MB"
 
+# Override any inherited IDF_TARGET from the user's shell. If this is left set
+# to a different chip (e.g. esp32), idf.py refuses to build with the message
+# "Project sdkconfig ... was generated for target 'esp32s3', but environment
+# variable IDF_TARGET is set to 'esp32'".
+export IDF_TARGET="$CHIP"
+
 cd "$(dirname "$0")"
+
+# `idf.py build` will pick the default target (often esp32) on first run if
+# nothing has set it yet, and once a sdkconfig exists for the wrong target it
+# sticks. Force the target before each build. ensure_target() is a no-op when
+# the existing sdkconfig already has CONFIG_IDF_TARGET="$CHIP".
+ensure_target() {
+    local proj="$1"
+    local cfg="${proj}/sdkconfig"
+    if [ -f "$cfg" ] && grep -q "^CONFIG_IDF_TARGET=\"${CHIP}\"" "$cfg"; then
+        return 0
+    fi
+    echo "Setting target to ${CHIP} for ${proj}/ ..."
+    rm -f "$cfg"
+    rm -rf "${proj}"/build*
+    idf.py -C "$proj" set-target "$CHIP"
+}
+
+ensure_target controller
+ensure_target relay
 
 # ---------------------------------------------------------------------------
 # 1. Controller (Waveshare ESP32-S3-RS485-CAN, OTA-capable)
